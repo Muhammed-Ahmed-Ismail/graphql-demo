@@ -10,7 +10,7 @@ export class Event{
 
     @Field({nullable:true})
     @Column({nullable:true})
-    data:Date
+    date:Date
 
     @Field()
     @Column()
