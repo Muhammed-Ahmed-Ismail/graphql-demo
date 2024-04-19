@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    container_name: nest
+    ports:
+      - 3000:3000
+
+    depends_on:
+      - db
+      
+    # restart: always
+    command: npm run start:debug
+
+    volumes:
+      - ./.:/usr/src/app
+  
+  db:
+    image: postgres:15
+    container_name: database
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: nest-events
+      POSTGRES_USER: admin
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+    volumes:
+      - nest-db-voulume:/var/lib/postgresql/data/pgdata
+    
+    ports:
+      - 5432:5432
+  
+  pgadmin:
+    image: dpage/pgadmin4:3
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 8070:80
+
+
+volumes:
+  nest-db-voulume:
