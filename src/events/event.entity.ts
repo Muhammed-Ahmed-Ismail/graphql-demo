@@ -8,6 +8,11 @@ export class Event{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Field({nullable:true})
+    @Column({nullable:true})
     data:Date
+
+    @Field()
+    @Column()
+    name:string
 }
