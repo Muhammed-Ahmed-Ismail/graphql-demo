@@ -4,7 +4,7 @@ import { Resolver } from "@nestjs/graphql";
 import { EventService } from "./events.service";
 import { EventCreateInput } from "./input/event.create.input";
 
-@Resolver(of => Event)
+@Resolver(() => Event)
 export class EventResolver {
 
     constructor(private eventService: EventService) { }
