@@ -27,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     driver: ApolloDriver,
     playground: true,
     autoSchemaFile: true,
+    
   }),
   ],
   controllers: [AppController],
