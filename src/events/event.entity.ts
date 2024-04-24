@@ -18,5 +18,5 @@ export class Event{
     name:string
 
     @ManyToMany(()=>User,(user)=>user.events)
-    attenders:User[]
+    attendees:Promise<User[]>
 }

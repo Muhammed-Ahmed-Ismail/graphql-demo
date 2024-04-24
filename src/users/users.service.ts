@@ -16,7 +16,9 @@ export class UserService {
     public async addUser(input: UserCreateInput): Promise<User> {
         let user: User = new User();
         user.email = input.email;
-        user.name = input.name
+        user.firstName = input.firstName;
+        user.lastName = input.lastName;
+
         user.password = await this.authService.hashPassword(input.password)
         return this.userRepository.save(user);
     }

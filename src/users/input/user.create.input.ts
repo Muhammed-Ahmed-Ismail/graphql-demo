@@ -5,7 +5,10 @@ import { Match } from "./decorators/password.match.decotator";
 @InputType()
 export class UserCreateInput {
     @Field()
-    name:string
+    firstName:string
+
+    @Field()
+    lastName:string
 
     @Field()
     @IsEmail()

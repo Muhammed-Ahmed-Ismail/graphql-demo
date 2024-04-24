@@ -22,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
     database: process.env.DATABASE_NAME,
     entities: [Event, User],
     synchronize: true,
+    
   }),
   GraphQLModule.forRoot<ApolloDriverConfig>({
     driver: ApolloDriver,

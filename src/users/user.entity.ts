@@ -10,8 +10,12 @@ export class User{
     id:number
 
     @Field()
-    @Column()
-    name:string
+    @Column({default: "foo"})
+    firstName:string
+
+    @Field()
+    @Column({default: "foo"})
+    lastName:string
 
     @Field()
     @Column({unique:true})
@@ -20,7 +24,8 @@ export class User{
     @Column()
     password:string
 
-    @ManyToMany(()=>Event,(event)=>event.attenders)
+    @Field(()=>[Event])
+    @ManyToMany(()=>Event,(event)=>event.attendees)
     @JoinTable()
-    events:Event[]
+    events: Promise<Event[]>
 }
