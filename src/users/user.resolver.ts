@@ -1,9 +1,10 @@
-import { Args, Mutation, Parent, ResolveField, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Parent, ResolveField, Resolver } from "@nestjs/graphql";
 import { User } from "./user.entity";
 import { Query } from "@nestjs/graphql";
 import { UserService } from "./users.service";
 import { UserCreateInput } from "./input/user.create.input";
 import { log } from "console";
+import { IDataloaders } from "src/dataloader/interfaces/data.loader.interface";
 
 @Resolver(() => User)
 export class UserResolver {
@@ -22,5 +23,13 @@ export class UserResolver {
     @ResolveField()
     public fullName(@Parent() user:User):string{
         return user.firstName + ' ' + user.lastName
+    }
+
+    @ResolveField()
+    public events(@Parent() user:User,@Context() { loaders }: { loaders: IDataloaders },){
+        // console.log("ssss");
+        const {id} = user
+        return loaders.eventsDataloader.load(id)
+        // return []
     }
 }

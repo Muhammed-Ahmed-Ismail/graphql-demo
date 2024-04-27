@@ -10,6 +10,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { DataloaderModule } from './dataloader/dataloader.module';
+import { DataLoaderService } from './dataloader/dataloader.service';
 
 @Module({
   imports: [ConfigModule.forRoot(), EventModule, UsersModule, AuthModule,
@@ -22,13 +24,23 @@ import { AuthModule } from './auth/auth.module';
     database: process.env.DATABASE_NAME,
     entities: [Event, User],
     synchronize: true,
+    logging: true
     
   }),
-  GraphQLModule.forRoot<ApolloDriverConfig>({
+  GraphQLModule.forRootAsync<ApolloDriverConfig>({
     driver: ApolloDriver,
-    playground: true,
-    autoSchemaFile: true,
-    
+    imports: [DataloaderModule],
+    useFactory: (dataloaderService: DataLoaderService) => {
+      return {
+        autoSchemaFile: true,
+        context: () => ({
+          loaders: dataloaderService.getLoaders(),
+        }),
+        playground:true
+      };
+    },
+    inject: [DataLoaderService],
+      
   }),
   ],
   controllers: [AppController],

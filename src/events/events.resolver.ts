@@ -1,4 +1,4 @@
-import { Args, Mutation, Query } from "@nestjs/graphql";
+import { Args, Int, Mutation, Query } from "@nestjs/graphql";
 import { Event } from "./event.entity";
 import { Resolver } from "@nestjs/graphql";
 import { EventService } from "./events.service";
@@ -15,6 +15,11 @@ export class EventResolver {
         return await this.eventService.findAll();
     }
 
+
+    @Query(()=>[Event])
+    async eventsByAttendees(@Args({name:"attendeeIds",type:()=> [Int]}) attendeeIds:number[]): Promise<Event[]>{
+        return await this.eventService.findEventsByAttendees(attendeeIds)
+    }
 
     @Mutation(() => Event)
     async addEvent(@Args({ name: "eventCreateInput",type: () => EventCreateInput }) eventCreateInput: EventCreateInput): Promise<Event> {
