@@ -27,9 +27,7 @@ export class UserResolver {
 
     @ResolveField()
     public events(@Parent() user:User,@Context() { loaders }: { loaders: IDataloaders },){
-        // console.log("ssss");
         const {id} = user
         return loaders.eventsDataloader.load(id)
-        // return []
     }
 }

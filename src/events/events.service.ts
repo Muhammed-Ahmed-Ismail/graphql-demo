@@ -7,6 +7,7 @@ import { AddAttendeeInput } from "./input/event.add.attendee";
 import { User } from "src/users/user.entity";
 import { EventRepository } from "./events.repository";
 import e from "express";
+import { EventEditInput } from "./input/event.edit.input";
 
 @Injectable()
 export class EventService {
@@ -17,10 +18,18 @@ export class EventService {
         return await this.eventRepository.find();
     }
 
-    public async addEvent(event: EventCreateInput): Promise<Event> {
-        return this.eventRepository.save(event)
+    public async addEvent(eventCreateInput: EventCreateInput): Promise<Event> {
+        return this.eventRepository.save(eventCreateInput)
     }
 
+    public async editEvent(eventEditInput: EventEditInput, id: number): Promise<Event> {
+        const event = await this.eventRepository.findOneByOrFail({
+            id
+        });
+        
+
+        return await this.eventRepository.save(Object.assign(event, eventEditInput));
+    }
     public async addAttendee(addAttendeeIbput: AddAttendeeInput): Promise<Event> {
         const eventObject = await this.eventRepository.findOneByOrFail({
             id: addAttendeeIbput.eventId
@@ -39,8 +48,7 @@ export class EventService {
     public async findEventsByAttendees(attendeeIds: number[]): Promise<Event[] | any[]> {
         const events = await this.eventRepository.findEventsByUserIds(attendeeIds)
         const mappedEvents = await this._mapEventsToAttendees(events, attendeeIds)
-        console.log('{{{{{{{{{{{{{{{mappedEvents}}}}}}}}}}}}}}}');
-        console.log(mappedEvents);
+
 
         return mappedEvents
 
@@ -49,7 +57,7 @@ export class EventService {
     private async _mapEventsToAttendees(events: Event[], attendeeIds: number[]) {
         const eventUsersMap = new Map<string, number[]>();
         events.forEach(async (event) => {
-            eventUsersMap.set(event.id.toString() , (await event.attendees).map((user) => user.id)) || [];
+            eventUsersMap.set(event.id.toString(), (await event.attendees).map((user) => user.id)) || [];
         })
         return attendeeIds.map(
             (id: number) => events.filter((event) => eventUsersMap.get(event.id.toString()).includes(id))

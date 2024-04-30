@@ -5,6 +5,10 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 @ObjectType()
 @Entity()
 export class Event{
+    constructor(partial?: Partial<Event>) {
+        Object.assign(this, partial);
+      }
+      
     @Field()
     @PrimaryGeneratedColumn()
     id: number;

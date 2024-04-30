@@ -4,6 +4,7 @@ import { Resolver } from "@nestjs/graphql";
 import { EventService } from "./events.service";
 import { EventCreateInput } from "./input/event.create.input";
 import { AddAttendeeInput } from "./input/event.add.attendee";
+import { EventEditInput } from "./input/event.edit.input";
 
 @Resolver(() => Event)
 export class EventResolver {
@@ -26,6 +27,15 @@ export class EventResolver {
         return this.eventService.addEvent(eventCreateInput);
     }
 
+    @Mutation(()=>Event)
+    async editEvent(
+        @Args({name:'id', type: ()=>Int})
+        id:number,
+        @Args({name:'eventEditInput',type:()=>EventEditInput})
+        eventEditInput:EventEditInput
+    ){
+        return this.eventService.editEvent(eventEditInput,id);
+    }
     @Mutation(()=>Event)
     async addAttendee(@Args({name:"addAttendeeInput"}) addAttendeeInput:AddAttendeeInput){
         return this.eventService.addAttendee(addAttendeeInput);

@@ -12,9 +12,7 @@ export class EventRepository extends Repository<Event> {
        const events = await this.createQueryBuilder("event")
             .innerJoinAndSelect("event.attendees", 'user', 'user.id in (:...ids)', { ids: userIds })
             .getMany()
-        
-        console.log(events);
-        
+            
         return events
     }
 }
